@@ -1,0 +1,7 @@
+{
+    "vapidKeys": {
+        "publicKey": "YOUR_PUBLIC_VAPID_KEY",
+        "privateKey": "YOUR_PRIVATE_VAPID_KEY"
+    },
+    "pushEmailAddress": "mailto:myuserid@email.com"
+}

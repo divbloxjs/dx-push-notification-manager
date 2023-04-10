@@ -1,0 +1,27 @@
+{
+    "name": "dx-push-notification-manager",
+    "version": "1.0.0",
+    "description": "A divbloxjs package that facilitates the backend management of web push notifications by using the web-push library",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/divbloxjs/dx-push-notification-manager.git"
+    },
+    "keywords": [
+        "divbloxjs",
+        "dxPushNotificationManager"
+    ],
+    "author": "Johan Griesel, johan@divblox.com - Divblox (Pty)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/divbloxjs/dx-push-notification-manager/issues"
+    },
+    "homepage": "https://github.com/divbloxjs/dx-push-notification-manager#readme",
+    "dependencies": {
+        "divbloxjs": "^1.2.8",
+        "web-push": "^3.5.0"
+    }
+}

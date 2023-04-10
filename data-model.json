@@ -1,0 +1,56 @@
+{
+    "pushSubscription": {
+        "module": "main",
+        "attributes": {
+            "pushSubscriptionIndex": {
+                "type": "varchar",
+                "lengthOrValues": 50,
+                "default": "",
+                "allowNull": false
+            },
+            "pushSubscriptionObject": {
+                "type": "text",
+                "lengthOrValues": null,
+                "default": null,
+                "allowNull": true
+            },
+            "globalIdentifier": {
+                "type": "varchar",
+                "lengthOrValues": 50,
+                "default": null,
+                "allowNull": true
+            },
+            "createdTimeStamp": {
+                "type": "timestamp",
+                "lengthOrValues": null,
+                "default": "CURRENT_TIMESTAMP",
+                "allowNull": false
+            },
+            "hasUnseenNotification": {
+                "type": "boolean",
+                "lengthOrValues": null,
+                "default": 0,
+                "allowNull": false
+            }
+        },
+        "indexes": [
+            {
+                "attribute": "pushSubscriptionIndex",
+                "indexName": "pushSubscription_pushSubscriptionIndex",
+                "indexChoice": "index",
+                "type": "BTREE"
+            },
+            {
+                "attribute": "globalIdentifier",
+                "indexName": "pushSubscription_globalIdentifier",
+                "indexChoice": "index",
+                "type": "BTREE"
+            }
+        ],
+        "relationships": {},
+        "options": {
+            "enforceLockingConstraints": false,
+            "isAuditEnabled": false
+        }
+    }
+}
