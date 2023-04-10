@@ -14,7 +14,7 @@ class DxPushNotifications extends divbloxPackageControllerBase {
      * @param {DivbloxBase} dxInstance An instance of divbloxjs to allow for access to the app configuration
      * @param {string} packageName The name given to this package
      */
-    constructor(dxInstance = null, packageName = "dx-push-notifications") {
+    constructor(dxInstance = null, packageName = "dx-push-notification-manager") {
         super(dxInstance, packageName);
 
         if (typeof this.packageOptions["vapidKeys"] === "undefined") {
