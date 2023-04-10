@@ -20,12 +20,6 @@
                 "default": null,
                 "allowNull": true
             },
-            "createdTimeStamp": {
-                "type": "timestamp",
-                "lengthOrValues": null,
-                "default": "CURRENT_TIMESTAMP",
-                "allowNull": false
-            },
             "hasUnseenNotification": {
                 "type": "boolean",
                 "lengthOrValues": null,
