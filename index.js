@@ -31,7 +31,7 @@ class DxPushNotifications extends divbloxPackageControllerBase {
         webPush.setVapidDetails(
             this.packageOptions["pushEmailAddress"],
             this.packageOptions["vapidKeys"].publicKey,
-            this.packageOptions["vapidKeys"].privateKey
+            this.packageOptions["vapidKeys"].privateKey,
         );
     }
 
@@ -183,20 +183,32 @@ class DxPushNotifications extends divbloxPackageControllerBase {
                 this.populateError("Invalid push subscription index provided");
                 return false;
             }
+            if (mustSetAsUnseen) {
+                pushSubscription.data.hasUnseenNotification = 1;
+                await pushSubscription.save();
+            }
         } else if (identifyVia.globalIdentifier !== undefined) {
-            if (!(await pushSubscription.loadByField("globalIdentifier", identifyVia.globalIdentifier))) {
-                this.populateError("Invalid push subscription globalIdentifier provided");
+            const pushSubscrioptionArray = await pushSubscription.findArray(
+                { fields: ["pushSubscriptionObject"] },
+                dxQ.equal("globalIdentifier", identifyVia.globalIdentifier),
+            );
+
+            const errors = [];
+            for (const row of pushSubscrioptionArray) {
+                if (
+                    !(await this.sendNotification(
+                        JSON.parse(row.pushSubscription.pushSubscriptionObject),
+                        messageOptions,
+                    ))
+                ) {
+                    errors.push(this.getLastError());
+                }
+            }
+
+            if (errors.length !== 0) {
+                this.populateError(JSON.stringify(errors));
                 return false;
             }
-        }
-
-        if (!(await this.sendNotification(JSON.parse(pushSubscription.data.pushSubscriptionObject), messageOptions))) {
-            return false;
-        }
-
-        if (mustSetAsUnseen) {
-            pushSubscription.data.hasUnseenNotification = 1;
-            await pushSubscription.save();
         }
 
         return true;
@@ -211,7 +223,7 @@ class DxPushNotifications extends divbloxPackageControllerBase {
         const pushSubscription = new PushSubscription(this.dxInstance);
         const pushSubscrioptionArray = await pushSubscription.findArray(
             { fields: ["pushSubscriptionObject"] },
-            dxQ.all()
+            dxQ.all(),
         );
         const errors = [];
         for (const row of pushSubscrioptionArray) {
