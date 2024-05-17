@@ -136,8 +136,8 @@ class DxPushNotificationsEndpoint extends divbloxEndpointBase {
         return new dxPushNotificationsController(this.dxInstance);
     }
 
-    async executeOperation(operation, request) {
-        if (!(await super.executeOperation(operation, request))) {
+    async executeOperation(operation, request, response) {
+        if (!(await super.executeOperation(operation, request, response))) {
             return false;
         }
 
@@ -178,7 +178,7 @@ class DxPushNotificationsEndpoint extends divbloxEndpointBase {
         const pushSubscriptionIndex = await this.controller.savePushSubscription(
             data.pushSubscriptionObject,
             vapidPublicKey,
-            this.currentGlobalIdentifier
+            this.currentGlobalIdentifier,
         );
         if (pushSubscriptionIndex === -1) {
             this.setResult(false, this.controller.getLastError());
