@@ -178,12 +178,19 @@ class DxPushNotifications extends divbloxPackageControllerBase {
      * @returns {Promise<boolean>}  True if the notification was sent, false otherwise
      */
     async deliverPushNotification(identifyVia, messageOptions, mustSetAsUnseen) {
+        console.log("deliverPushNotification() ----------------");
+        console.log("identifyVia", identifyVia);
+        console.log("messageOptions", messageOptions);
+        console.log("mustSetAsUnseen", mustSetAsUnseen);
         const pushSubscription = new PushSubscription(this.dxInstance);
         if (identifyVia.pushSubscriptionIndex !== undefined) {
             if (!(await pushSubscription.loadByField("pushSubscriptionIndex", identifyVia.pushSubscriptionIndex))) {
                 this.populateError("Invalid push subscription index provided");
+                console.log("BROKE 1");
                 return false;
             }
+
+            console.log("pushSubscription.data", pushSubscription.data);
             if (mustSetAsUnseen) {
                 pushSubscription.data.hasUnseenNotification = 1;
                 await pushSubscription.save();
@@ -194,6 +201,7 @@ class DxPushNotifications extends divbloxPackageControllerBase {
                 dxQ.equal("globalIdentifier", identifyVia.globalIdentifier),
             );
 
+            console.log("pushSubscrioptionArray", pushSubscrioptionArray)
             const errors = [];
             for (const row of pushSubscrioptionArray) {
                 if (
@@ -206,12 +214,15 @@ class DxPushNotifications extends divbloxPackageControllerBase {
                 }
             }
 
+            console.log("errors", errors);
             if (errors.length !== 0) {
                 this.populateError(JSON.stringify(errors));
+                console.log("BROKE 2");
                 return false;
             }
         }
 
+        console.log("SUCCESS");
         return true;
     }
 
@@ -250,9 +261,12 @@ class DxPushNotifications extends divbloxPackageControllerBase {
      * @returns {Promise<boolean>}  True if the notification was sent, false otherwise
      */
     async sendNotification(pushSubscription, options) {
+        console.log("sendNotification()");
         try {
             await webPush.sendNotification(pushSubscription, JSON.stringify(options));
+            console.log("webPush.sendNotification() success");
         } catch (error) {
+            console.log("webPush.sendNotification() error", error);
             this.populateError(error);
             return false;
         }
