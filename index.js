@@ -263,8 +263,8 @@ class DxPushNotifications extends divbloxPackageControllerBase {
     async sendNotification(pushSubscription, options) {
         console.log("sendNotification()");
         try {
-            await webPush.sendNotification(pushSubscription, JSON.stringify(options));
-            console.log("webPush.sendNotification() success");
+            const result = await webPush.sendNotification(pushSubscription, JSON.stringify(options), {timeout: 5000});
+            console.log("webPush.sendNotification() success", result);
         } catch (error) {
             console.log("webPush.sendNotification() error", error);
             this.populateError(error);
