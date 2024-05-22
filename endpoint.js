@@ -209,9 +209,11 @@ class DxPushNotificationsEndpoint extends divbloxEndpointBase {
         if (
             !(await this.controller.deliverPushNotification({ pushSubscriptionIndex: pushSubscriptionIndex }, options))
         ) {
+            console.log("endpoint error", this.controller.getLastError());
             this.setResult(false, this.controller.getLastError());
             return;
         }
+        
         this.setResult(true, "Notification sent!");
     }
 
