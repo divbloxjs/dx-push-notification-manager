@@ -1,6 +1,6 @@
 {
     "name": "dx-push-notification-manager",
-    "version": "2.0.0-beta.4",
+    "version": "2.0.0-beta.5",
     "description": "A divbloxjs package that facilitates the backend management of web push notifications by using the web-push library",
     "main": "index.js",
     "scripts": {

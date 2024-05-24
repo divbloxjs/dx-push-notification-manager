@@ -178,32 +178,25 @@ class DxPushNotifications extends divbloxPackageControllerBase {
      * @returns {Promise<boolean>}  True if the notification was sent, false otherwise
      */
     async deliverPushNotification(identifyVia, messageOptions, mustSetAsUnseen) {
-        console.log("deliverPushNotification() ----------------");
-        console.log("identifyVia", identifyVia);
-        console.log("messageOptions", messageOptions);
-        console.log("mustSetAsUnseen", mustSetAsUnseen);
         const pushSubscription = new PushSubscription(this.dxInstance);
         if (identifyVia.pushSubscriptionIndex !== undefined) {
             if (!(await pushSubscription.loadByField("pushSubscriptionIndex", identifyVia.pushSubscriptionIndex))) {
                 this.populateError("Invalid push subscription index provided");
-                console.log("BROKE 1");
                 return false;
             }
 
-            console.log("pushSubscription.data", pushSubscription.data);
             if (mustSetAsUnseen) {
                 pushSubscription.data.hasUnseenNotification = 1;
                 await pushSubscription.save();
             }
         } else if (identifyVia.globalIdentifier !== undefined) {
-            const pushSubscrioptionArray = await pushSubscription.findArray(
+            const pushSubscriptionArray = await pushSubscription.findArray(
                 { fields: ["pushSubscriptionObject"] },
                 dxQ.equal("globalIdentifier", identifyVia.globalIdentifier),
             );
 
-            console.log("pushSubscrioptionArray", pushSubscrioptionArray)
             const errors = [];
-            for (const row of pushSubscrioptionArray) {
+            for (const row of pushSubscriptionArray) {
                 if (
                     !(await this.sendNotification(
                         JSON.parse(row.pushSubscription.pushSubscriptionObject),
@@ -214,15 +207,12 @@ class DxPushNotifications extends divbloxPackageControllerBase {
                 }
             }
 
-            console.log("errors", errors);
             if (errors.length !== 0) {
                 this.populateError(JSON.stringify(errors));
-                console.log("BROKE 2");
                 return false;
             }
         }
 
-        console.log("SUCCESS");
         return true;
     }
 
@@ -261,12 +251,9 @@ class DxPushNotifications extends divbloxPackageControllerBase {
      * @returns {Promise<boolean>}  True if the notification was sent, false otherwise
      */
     async sendNotification(pushSubscription, options) {
-        console.log("sendNotification()");
         try {
             const result = await webPush.sendNotification(pushSubscription, JSON.stringify(options), {timeout: 5000});
-            console.log("webPush.sendNotification() success", result);
         } catch (error) {
-            console.log("webPush.sendNotification() error", error);
             this.populateError(error);
             return false;
         }
